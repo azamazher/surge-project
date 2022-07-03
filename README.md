@@ -36,4 +36,4 @@ npm run start
 
 ## License
 
-Azam Azher 2022.
+Azam Azher © 2022.
