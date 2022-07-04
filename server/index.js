@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const User = require('./models/user.model')
-
+const jwt = require('jsonwebtoken')
 app.use(cors())
 app.use(express.json())
 
@@ -14,9 +14,6 @@ mongoose.connect(db_url, { useUnifiedTopology:true }, (err) => {
     console.log('Successfully connected');
     }
 );
-
-
-
 
 
 app.post('/api/register', async (req, res) => {
@@ -40,6 +37,14 @@ app.post('/api/login', async (req, res) => {
     })
 
     if (user) {
+
+        const token = jwt.sign(
+            {
+                name: user.name,
+                email: user.email,
+            },
+            'secret123'
+        )
         return res.json({ status: 'ok', user: true })
     } else {
         return res.json({ status: 'error', user: false })
