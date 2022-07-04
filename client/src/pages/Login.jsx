@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom'
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const history = useHistory()
   const loginUser = async (event) => {
+
+
     event.preventDefault();
     const response = await fetch("http://localhost:1337/api/login", {
       method: "POST",
@@ -18,6 +22,14 @@ const Login = () => {
     });
 
     const data = await response.json();
+
+    if(data.user) {
+      console.log(data.user)
+      alert('Login successful')
+      history.push('/dashboard');
+    } else {
+      alert('Please check your username and password')
+    }
     console.log(data);
   };
 
@@ -38,7 +50,7 @@ const Login = () => {
           type="password"
           placeholder="Password"
         />
-        <input type="submit" value="Register" />
+        <input type="submit" value="Login" />
       </form>
     </div>
   );
