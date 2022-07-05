@@ -24,7 +24,7 @@ const Login = () => {
     const data = await response.json();
 
     if(data.user) {
-      console.log(data.user)
+      localStorage.setItem('token', data.user);
       alert('Login successful')
       history.push('/dashboard');
     } else {
