@@ -4,8 +4,11 @@ import { useHistory } from "react-router-dom";
 import { useState } from "react";
 
 const Dashboard = () => {
+  const MAX_NOTES_PER_PAGE = 2;
   const history = useHistory();
   const [notes, setNotes] = useState([]);
+  const [notesCount, setNotesCount] = useState(0);
+  const [page, setPage] = useState(1);
   const [tempTitle, setTempTitle] = useState("");
   const [tempDescription, setTempDescription] = useState("");
 
@@ -24,7 +27,7 @@ const Dashboard = () => {
         getNotes();
       }
     }
-  }, [history, logoutUser]);
+  }, []);
 
   const createNote = async () => {
     const req = await fetch("http://localhost:1337/api/note", {
@@ -71,19 +74,20 @@ const Dashboard = () => {
   };
 
   const getNotes = async () => {
-    const req = await fetch("http://localhost:1337/api/notes", {
+    const req = await fetch(`http://localhost:1337/api/notes?limitTo=${MAX_NOTES_PER_PAGE}&skip=${(page - 1) * MAX_NOTES_PER_PAGE}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": localStorage.getItem("token"),
-      }
+      },
     });
 
-    const data = await req.json();
-    if (data.status === "ok") {
-      setNotes([...data.notes]);
+    const response = await req.json();
+    if (response.status === "ok") {
+      setNotesCount(response.metadata.total);
+      setNotes([...response.data]);
     } else {
-      alert(data.error);
+      alert(response.error);
     }
   };
 
@@ -128,13 +132,18 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
-      <input
-        type="button"
-        onClick={() => logoutUser()}
-        value="logout"
-      ></input>
-        
+      {notesCount > MAX_NOTES_PER_PAGE && (
         <div>
+          {Array(Math.ceil(notesCount / MAX_NOTES_PER_PAGE))
+            .fill()
+            .map((x, i) => (
+              <input key={i+1} type="button" onClick={() => setPage(i+1)} value={i+1} />
+            ))}
+        </div>
+      )}
+      <input type="button" onClick={() => logoutUser()} value="logout"></input>
+
+      <div>
         <input
           type="text"
           placeholder="Notes Title"
@@ -148,9 +157,7 @@ const Dashboard = () => {
           onChange={(e) => setTempDescription(e.target.value)}
         />
         <input type="button" value="Create note" onClick={createNote} />
-        </div>
-        
-      
+      </div>
     </div>
   );
 };

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 const Register = () => {
-  const history = useHistory()
-  const [name, setName] = useState("");
+  const history = useHistory();
+  const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [accountType, setAccountType] = useState("");
 
   const registerUser = async (event) => {
     event.preventDefault();
@@ -15,26 +15,25 @@ const Register = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name,
+        firstName,
         email,
-        password,
+        accountType,
       }),
     });
 
     const data = await response.json();
-    if(data.status === 'ok')
-    history.push('/login')
-  }
+    if (data.status === "ok") history.push("/login");
+  };
 
   return (
     <div>
       <h1>Register</h1>
       <form onSubmit={registerUser}>
         <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
           type="text"
-          placeholder="Name"
+          placeholder="Firstname"
         />
         <br />
         <input
@@ -43,13 +42,20 @@ const Register = () => {
           type="email"
           placeholder="Email"
         />
+        <div>
+          <label for="accountTypes">Choose a account type:</label>
+          <select
+            name="accountTypes"
+            id="accountTypes"
+            onChange={(event) => setAccountType(event.target.value)}
+            value={accountType}
+          >
+            <option value="STUDENT">Student</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+        </div>
+
         <br />
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type="password"
-          placeholder="Password"
-        />
         <input type="submit" value="Register" />
       </form>
     </div>

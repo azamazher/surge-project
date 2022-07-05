@@ -11,6 +11,15 @@ npm run install
 npm run dev
 ```
 
+Add the following keys to the process environemnt or `server/config/dev.js`,
+
+```sh
+MAILGUN_API_KEY
+MAILGUN_API_DOMAIN
+MAILGUN_FROM_ADDRESS
+JWT_SECRET_KEY
+```
+
 ### Client
 
 ```
