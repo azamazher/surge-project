@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom'
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const history = useHistory()
+  const history = useHistory();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      history.push('/dashboard');
+    }
+  }, [history]);
+
   const loginUser = async (event) => {
-
-
     event.preventDefault();
     const response = await fetch("http://localhost:1337/api/login", {
       method: "POST",
@@ -25,12 +31,10 @@ const Login = () => {
 
     if(data.user) {
       localStorage.setItem('token', data.user);
-      alert('Login successful')
       history.push('/dashboard');
     } else {
       alert('Please check your username and password')
     }
-    console.log(data);
   };
 
   return (
