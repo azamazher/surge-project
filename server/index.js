@@ -39,9 +39,9 @@ app.post("/api/register", async (req, res) => {
     });
 
     await sendMail({
-      to:  req.body.email,
+      to: req.body.email,
       subject: "You've successfully registered",
-      body: { email:  req.body.email, password: tempPassword },
+      body: { email: req.body.email, password: tempPassword },
     });
     return res.json({ status: "ok" });
   } catch (error) {
@@ -69,35 +69,84 @@ app.post("/api/login", async (req, res) => {
       {
         id: user._id,
         firstName: user.firstName,
+        status: user.status,
+        accountType: user.accountType,
         email: user.email,
       },
       config.jwt.secret
     );
-    return res.json({ status: "ok", user: token });
+    return res.json({ status: "ok", user: token, status: user.status });
   } else {
     return res.json({ status: "error", user: false });
   }
 });
 
-// User
+// Profile
+app.post("/api/profile", async (req, res) => {
+  const token = req.headers["x-access-token"];
+  const decoded = jwt.verify(token, config.jwt.secret);
+  const userId = decoded.id;
 
-// Users
-app.post("/api/user", async (req, res) => {
-  console.log(req.body);
   try {
     const newPassword = await bcrypt.hash(req.body.password, 10);
-    await User.create({
-      firstName: req.body.firstName,
-      email: req.body.email,
-      password: newPassword,
-      accountType: req.body.accountType,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+
+    await User.updateOne(
+      { _id: userId },
+      {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        dateOfBirth: new Date(req.body.dateOfBirth),
+        password: newPassword,
+        status: 1,
+        updatedAt: new Date(),
+      }
+    );
     return res.json({ status: "ok" });
   } catch (err) {
     console.log(error);
     res.json({ status: "error", error: "Duplicate email" });
+  }
+});
+
+// Users
+app.get("/api/users", async (req, res) => {
+  const token = req.headers["x-access-token"];
+  const pagination = {
+    limitTo: req.query.limitTo,
+    skip: req.query.skip,
+  };
+
+  try {
+    const decoded = jwt.verify(token, config.jwt.secret);
+    const total = await User.countDocuments({});
+
+    // TODO: generalize it as a middleware for authorization
+    if (!decoded.status && !decoded.accountType === "ADMIN") {
+      res.json({ status: "error", error: "access denied" });
+    }
+
+    let users = [];
+
+    if (pagination && pagination.skip && pagination.limitTo) {
+      users = await User.find({})
+        .skip(parseInt(pagination.skip))
+        .limit(parseInt(pagination.limitTo));
+    } else {
+      users = await User.find({});
+    }
+
+    return res.json({
+      status: "ok",
+      data: [...users],
+      metadata: {
+        total,
+        limitTo: pagination && pagination.limitTo ? pagination.limitTo : 0,
+        skip: pagination && pagination.skip ? pagination.skip : 0,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error", error: "invalid token" });
   }
 });
 
