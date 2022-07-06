@@ -10,7 +10,13 @@ A sample development project for Surge.
 
 ```
 npm run install
-npm run dev
+npm run dev (this automatically runs the seed script)
+```
+
+If you need to only run the seed script,
+
+```
+npm run seed:user
 ```
 
 Add the following keys to the process environemnt or `server/config/dev.js`,
@@ -22,6 +28,14 @@ MAILGUN_FROM_ADDRESS
 JWT_SECRET_KEY
 ```
 
+Seeded admin user credentials,
+
+```sh
+    email: "test@surge.com",
+    password: "test123",
+
+```
+
 ### Client
 
 ```
@@ -31,15 +45,15 @@ npm run start
 
 ## TODO
 
-- [ ] Analyze below diagram and Create the frontend and backend application.
-- [ ] Explain the application briefly in the readme file.
-- [ ] Proper error handling should be implemented.
-- [ ] Add loading indicators to necessary places.
-- [ ] Implement backend pagination for list.
+- [x] Analyze below diagram and Create the frontend and backend application.
+- [x] Explain the application briefly in the readme file.
+- [x] Proper error handling should be implemented.
+- [x] Add loading indicators to necessary places.
+- [x] Implement backend pagination for list.
 - [ ] Search user by name, email or id.
-- [ ] Routes should be protected for user types.
+- [x] Routes should be protected for user types.
 - [x] Implement token based authentication.
-- [ ] Write a seed file to add admin to the database directly.
+- [x] Write a seed file to add admin to the database directly.
 - [ ] Write Unit testing. (Bonus Steps) - mocha, sinonjs.
 - [ ] Host backend, frontend and DB in separate docker containers and should be able to up all using docker-compose. (Bonus Steps)
 - [ ] Add typescript support for server and react

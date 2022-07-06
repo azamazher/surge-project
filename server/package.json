@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon index.js"
+    "seed:user": "node ./scripts/seedUser.js",
+    "dev": "npm run seed:user && nodemon index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

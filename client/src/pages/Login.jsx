@@ -2,6 +2,11 @@ import jwt from "jsonwebtoken";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Container from "react-bootstrap/Container";
+
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,25 +51,27 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={loginUser}>
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type="email"
-          placeholder="Email"
-        />
-        <br />
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type="password"
-          placeholder="Password"
-        />
-        <input type="submit" value="Login" />
-      </form>
-    </div>
+    <Container className="mt-4" fluid>
+      <h2 className="mb-4">Login</h2>
+      <div>
+        <Form onSubmit={loginUser}>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Email</Form.Label>
+            <Form.Control type="email" placeholder="Email" value={email}
+              onChange={(e) => setEmail(e.target.value)} />
+            <Form.Text className="text-muted">
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" placeholder="Password" value={password}
+              onChange={(e) => setPassword(e.target.value)} />
+          </Form.Group>
+          <Button variant="primary" type="submit" value="Login">Login</Button>
+        </Form>
+      </div>
+    </Container>
   );
 };
 
