@@ -2,7 +2,9 @@
 
 A sample development project for Surge.
 
-## Development
+## Getting Started
+
+> Before getting stated, you might need npm `v16.13.1`. 
 
 ### Server
 
@@ -36,7 +38,7 @@ npm run start
 - [ ] Implement backend pagination for list.
 - [ ] Search user by name, email or id.
 - [ ] Routes should be protected for user types.
-- [ ] Implement token based authentication.
+- [x] Implement token based authentication.
 - [ ] Write a seed file to add admin to the database directly.
 - [ ] Write Unit testing. (Bonus Steps) - mocha, sinonjs.
 - [ ] Host backend, frontend and DB in separate docker containers and should be able to up all using docker-compose. (Bonus Steps)

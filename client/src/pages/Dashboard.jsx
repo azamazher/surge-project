@@ -3,6 +3,10 @@ import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+
+
 const Dashboard = () => {
   const MAX_NOTES_PER_PAGE = 2;
   const history = useHistory();
@@ -84,8 +88,7 @@ const Dashboard = () => {
 
   const getNotes = async () => {
     const req = await fetch(
-      `http://localhost:1337/api/notes?limitTo=${MAX_NOTES_PER_PAGE}&skip=${
-        (notesPage - 1) * MAX_NOTES_PER_PAGE
+      `http://localhost:1337/api/notes?limitTo=${MAX_NOTES_PER_PAGE}&skip=${(notesPage - 1) * MAX_NOTES_PER_PAGE
       }`,
       {
         method: "GET",
@@ -107,8 +110,7 @@ const Dashboard = () => {
 
   const getUsers = async () => {
     const req = await fetch(
-      `http://localhost:1337/api/users?limitTo=${MAX_NOTES_PER_PAGE}&skip=${
-        (usersPage - 1) * MAX_NOTES_PER_PAGE
+      `http://localhost:1337/api/users?limitTo=${MAX_NOTES_PER_PAGE}&skip=${(usersPage - 1) * MAX_NOTES_PER_PAGE
       }`,
       {
         method: "GET",
@@ -187,8 +189,8 @@ const Dashboard = () => {
             ))}
         </div>
       )}
-      <input type="button" onClick={() => logoutUser()} value="logout"></input>
-
+       <Button variant="danger" onClick={() => logoutUser()} value="logout">LogOut</Button>
+  
       <div className="">
         <div>
           {users.map((user) => (
@@ -234,7 +236,7 @@ const Dashboard = () => {
           value={tempDescription}
           onChange={(e) => setTempDescription(e.target.value)}
         />
-        <input type="button" value="Create note" onClick={createNote} />
+        <Button variant="primary" onClick={createNote} >Create note</Button>
       </div>
     </div>
   );

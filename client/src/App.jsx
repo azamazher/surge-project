@@ -1,34 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { BrowserRouter, Route, Redirect } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import Profile from "./pages/Profile";
+import React, { Suspense, lazy } from "react";
+import Loader from "./components/loader";
+import './App.css';
+
+
+import Header from './components/header'; 
+import Main from './components/main'; 
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-        setIsLoggedIn(true);
-        // setIsNewUser()
-    } else {
-        setIsLoggedIn(false);
-    }
-  }, []);
-
   return (
-    <div>
-      <BrowserRouter>
-        <Route path="/login" exact component={Login} />
-        <Route path="/register" exact component={Register} />
-        <Route path="/dashboard" exact component={Dashboard} />
-        <Route path="/profile" exact component={Profile} />
-      </BrowserRouter>
-    </div>
+    <>
+      <Suspense fallback={<Loader message="Loading..." />}>
+        <Header />
+        <Main />
+      </Suspense>
+
+    </>
   );
 };
 

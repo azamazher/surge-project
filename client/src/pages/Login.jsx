@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import React, { useEffect, useState } from "react";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,10 +13,10 @@ const Login = () => {
     if (token) {
       const user = jwt.decode(token);
       if (user) {
-        if(user.status === 0) {
+        if (user.status === 0) {
           history.push("/profile");
         } else {
-          history.push('/dashboard');
+          history.push("/dashboard");
         }
       }
     }
@@ -37,11 +37,11 @@ const Login = () => {
 
     const data = await response.json();
 
-    if(data.user) {
-      localStorage.setItem('token', data.user);
-      history.push('/dashboard');
+    if (data.user) {
+      localStorage.setItem("token", data.user);
+      history.push("/dashboard");
     } else {
-      alert('Please check your username and password')
+      alert("Please check your username and password");
     }
   };
 

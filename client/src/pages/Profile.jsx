@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 
@@ -11,6 +11,12 @@ const Profile = () => {
   const [password, setPassword] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
 
+  const logoutUser = useCallback(() => {
+    localStorage.removeItem("token");
+    history.replace("/login");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -19,12 +25,9 @@ const Profile = () => {
         logoutUser();
       }
     }
-  }, []);
+  }, [logoutUser]);
 
-  const logoutUser = () => {
-    localStorage.removeItem("token");
-    history.replace("/login");
-  };
+
 
   const updateProfileDetails = async () => {
     const req = await fetch(`http://localhost:1337/api/profile`, {
