@@ -75,7 +75,7 @@ app.post("/api/login", async (req, res) => {
       },
       config.jwt.secret
     );
-    return res.json({ status: "ok", user: token, status: user.status });
+    return res.json({ status: "ok", user: token });
   } else {
     return res.json({ status: "error", user: false });
   }
@@ -96,6 +96,7 @@ app.post("/api/profile", async (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         dateOfBirth: new Date(req.body.dateOfBirth),
+        mobile: req.body.mobile,
         password: newPassword,
         status: 1,
         updatedAt: new Date(),
@@ -107,6 +108,24 @@ app.post("/api/profile", async (req, res) => {
     res.json({ status: "error", error: "Duplicate email" });
   }
 });
+
+app.get("/api/profile", async (req, res) => {
+  const token = req.headers["x-access-token"];
+  const decoded = jwt.verify(token, config.jwt.secret);
+  const userId = decoded.id;
+
+  try {
+    const userDetails = await User.findOne(
+      { _id: userId }
+    );
+    return res.json({ status: "ok", user: userDetails });
+  } catch (err) {
+    console.log(error);
+    res.json({ status: "error", error: "Duplicate email" });
+  }
+});
+
+
 
 // Users
 app.get("/api/users", async (req, res) => {
@@ -137,7 +156,20 @@ app.get("/api/users", async (req, res) => {
 
     return res.json({
       status: "ok",
-      data: [...users],
+      data: [...users.map((user) => {
+        return {
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          dateOfBirth: user.dateOfBirth,
+          mobile: user.mobile,
+          status: user.status,
+          accountType: user.accountType,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        };
+      })],
       metadata: {
         total,
         limitTo: pagination && pagination.limitTo ? pagination.limitTo : 0,
@@ -149,6 +181,7 @@ app.get("/api/users", async (req, res) => {
     res.json({ status: "error", error: "invalid token" });
   }
 });
+
 
 // Notes
 app.get("/api/notes", async (req, res) => {

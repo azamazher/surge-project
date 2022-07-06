@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import React, { useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom'
 
@@ -10,7 +11,14 @@ const Login = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      history.push('/dashboard');
+      const user = jwt.decode(token);
+      if (user) {
+        if(user.status === 0) {
+          history.push("/profile");
+        } else {
+          history.push('/dashboard');
+        }
+      }
     }
   }, [history]);
 

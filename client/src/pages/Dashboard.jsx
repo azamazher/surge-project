@@ -8,9 +8,12 @@ const Dashboard = () => {
   const history = useHistory();
   const [notes, setNotes] = useState([]);
   const [notesCount, setNotesCount] = useState(0);
-  const [page, setPage] = useState(1);
+  const [notesPage, setNotesPage] = useState(1);
+  const [usersPage, setUsersPage] = useState(1);
   const [tempTitle, setTempTitle] = useState("");
   const [tempDescription, setTempDescription] = useState("");
+  const [users, setUsers] = useState([]);
+  const [usersCount, setUsersCount] = useState(0);
 
   const logoutUser = () => {
     localStorage.removeItem("token");
@@ -19,12 +22,18 @@ const Dashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
       const user = jwt.decode(token);
       if (!user) {
         logoutUser();
       } else {
-        getNotes();
+        if (user.status === 0) {
+          history.push("/profile");
+        } else {
+          getNotes();
+          getUsers();
+        }
       }
     }
   }, []);
@@ -67,25 +76,53 @@ const Dashboard = () => {
 
     const data = await req.json();
     if (data.status === "ok") {
-      getNotes();
+      await getNotes();
     } else {
       alert(data.error);
     }
   };
 
   const getNotes = async () => {
-    const req = await fetch(`http://localhost:1337/api/notes?limitTo=${MAX_NOTES_PER_PAGE}&skip=${(page - 1) * MAX_NOTES_PER_PAGE}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": localStorage.getItem("token"),
-      },
-    });
+    const req = await fetch(
+      `http://localhost:1337/api/notes?limitTo=${MAX_NOTES_PER_PAGE}&skip=${
+        (notesPage - 1) * MAX_NOTES_PER_PAGE
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": localStorage.getItem("token"),
+        },
+      }
+    );
 
     const response = await req.json();
     if (response.status === "ok") {
       setNotesCount(response.metadata.total);
       setNotes([...response.data]);
+    } else {
+      alert(response.error);
+    }
+  };
+
+  const getUsers = async () => {
+    const req = await fetch(
+      `http://localhost:1337/api/users?limitTo=${MAX_NOTES_PER_PAGE}&skip=${
+        (usersPage - 1) * MAX_NOTES_PER_PAGE
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    const response = await req.json();
+    if (response.status === "ok") {
+      setUsersCount(response.metadata.total);
+      setUsers([...response.data]);
     } else {
       alert(response.error);
     }
@@ -106,6 +143,10 @@ const Dashboard = () => {
     } else {
       alert(data.error);
     }
+  };
+
+  const showUserDetailsPopup = async (user) => {
+    alert(JSON.stringify(user));
   };
 
   return (
@@ -137,11 +178,48 @@ const Dashboard = () => {
           {Array(Math.ceil(notesCount / MAX_NOTES_PER_PAGE))
             .fill()
             .map((x, i) => (
-              <input key={i+1} type="button" onClick={() => setPage(i+1)} value={i+1} />
+              <input
+                key={i + 1}
+                type="button"
+                onClick={() => setNotesPage(i + 1)}
+                value={i + 1}
+              />
             ))}
         </div>
       )}
       <input type="button" onClick={() => logoutUser()} value="logout"></input>
+
+      <div className="">
+        <div>
+          {users.map((user) => (
+            <div key={user._id}>
+              <span>{user.firstName + " - "}</span>
+              <span>{user.lastName}</span>
+              <span>
+                <input
+                  type="button"
+                  onClick={() => showUserDetailsPopup(user)}
+                  value="Show popup"
+                ></input>
+              </span>
+            </div>
+          ))}
+        </div>
+        {usersCount > MAX_NOTES_PER_PAGE && (
+          <div>
+            {Array(Math.ceil(usersCount / MAX_NOTES_PER_PAGE))
+              .fill()
+              .map((x, i) => (
+                <input
+                  key={i + 1}
+                  type="button"
+                  onClick={() => setUsersPage(i + 1)}
+                  value={i + 1}
+                />
+              ))}
+          </div>
+        )}
+      </div>
 
       <div>
         <input
