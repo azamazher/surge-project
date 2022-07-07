@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Container from "react-bootstrap/Container";
 
 
-const Home = () => {
+const Home = (props) => {
   const history = useHistory();
 
   const logoutUser = () => {
@@ -28,8 +28,9 @@ const Home = () => {
   }, []);
 
   return (
-    <Container className="mt-4">
+    <Container className="mt-4" >
       <h2 className="mb-4">Home</h2>
+      <div style={{ backgroundImage:`url('/images/surgeglobal.jpg')`, width:'61vw', height:'67vh' }}></div>
     </Container>
   );
 };

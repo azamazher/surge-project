@@ -31,9 +31,8 @@ JWT_SECRET_KEY
 Seeded admin user credentials,
 
 ```sh
-    email: "test@surge.com",
-    password: "test123",
-
+    email: "test@surge.com"
+    password: "test123"
 ```
 
 ### Client

@@ -36,9 +36,9 @@ const Header = () => {
             <Navbar.Brand>Surge Project</Navbar.Brand>
           </Col>
           <Col>
-            {!user && <Button variant="success" onClick={() => history && history.push("/register")} value="logout">Register</Button>}
+            {!user && <Button variant="success" onClick={() => history && history.push("/register")} value="Register">Register</Button>}
             {user ? <Button variant="danger" onClick={() => logoutUser()} value="logout">LogOut</Button>
-              : <Button variant="primary" onClick={() => history && history.replace("/login")} value="login">Login</Button>
+              : <Button variant="primary" onClick={() => history && history.replace("/login")} value="Login">Login</Button>
             }
           </Col>
         </Row>
