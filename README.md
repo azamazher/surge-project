@@ -63,6 +63,14 @@ npm run start
 Here there is a error while we create a new user the temporary password is only will be send to a specific party who is azam.techofficial@gmail.com. To make it work we need to give the new profile status true in MongoDB and we need to the password of the following logged admin Adrew.
 
 
+## USER CREATE
+
+when you create a user you might be need to use a free or paid email sender website here I've used the follwoing mailgun. but this following mailgun will send mail only to a single user. So when you create a new user you need to paste the admin password which is andrew's password and you need to put status as true in MongoDB or you can directly use your own mail sender system to view. here to login you dont need a admin i've already crated a test user it will be auto run when you run dev the server. the following email and password can be seen the server runtime  
+
+## SEED USER 
+email: 'test@surge.com', password: 'test123'. 
+
+
 ## License
 
 Azam Azher © 2022.

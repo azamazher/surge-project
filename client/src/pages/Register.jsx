@@ -42,6 +42,7 @@ const Register = () => {
       if (!user || (user && (user.accountType !== "ADMIN" || !user.status) )) {
         if(history) history.replace("/");
       }
+      alert("User Created Successfully")
     }
   };
 

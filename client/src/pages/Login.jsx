@@ -45,6 +45,7 @@ const Login = () => {
     if (data.user) {
       localStorage.setItem("token", data.user);
       history.push("/dashboard");
+      alert("login Successfully");
     } else {
       alert("Please check your username and password");
     }
