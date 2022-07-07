@@ -48,7 +48,7 @@ const seedAdmin = async (input) => {
 
 
 module.exports = seedAdmin({
-    firstName: "John",
+    firstName: "Andrew",
     lastName: "Doe",
     email: "test@surge.com",
     password: "test123",
