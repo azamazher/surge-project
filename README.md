@@ -58,6 +58,11 @@ npm run start
 - [ ] Add typescript support for server and react
 - [ ] Add eslint support for linting
 
+## ERROR TO NOTE
+
+Here there is a error while we create a new user the temporary password is only will be send to a specific party who is azam.techofficial@gmail.com. To make it work we need to give the new profile status true in MongoDB and we need to the password of the following logged admin Adrew.
+
+
 ## License
 
 Azam Azher © 2022.
